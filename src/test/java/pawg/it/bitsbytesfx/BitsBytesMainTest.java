@@ -1,10 +1,7 @@
 package pawg.it.bitsbytesfx;
 
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,14 +18,19 @@ import static java.util.stream.Collectors.toCollection;
 @ExtendWith(ApplicationExtension.class)
 class BitsBytesMainTest {
 
+    /**
+     * Works like @BeforeEach, so before each test new stage is provided
+     */
     @Start
     private void start(Stage stage) throws IOException {
-        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/pizza.png"))));
+        new BitsBytesMain().start(stage);
+
+        /*stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/pizza.png"))));
         FXMLLoader fxmlLoader = new FXMLLoader(BitsBytesMain.class.getResource("main.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Bits & Bytes");
         stage.setScene(scene);
-        stage.show();
+        stage.show();*/
     }
 
     private <T extends Node> T getNode(Set<T> nodes, String id) {
@@ -49,8 +51,9 @@ class BitsBytesMainTest {
         Button nonBlockingButton = getNode(buttons, "nonBlockingButton");
         Assertions.assertThat(nonBlockingButton).hasText("Non-blocking");
 
-        Button blockingButton = buttons.stream().filter(b -> "Blocking".equals(b.getText())).findFirst().get();
-        Assertions.assertThat(blockingButton).hasText("Blocking");
+        Optional<Button> blockingButton = buttons.stream().filter(b -> "Blocking".equals(b.getText())).findFirst();
+        Assertions.assertThat(blockingButton).isPresent();
+        Assertions.assertThat(blockingButton.get()).hasText("Blocking");
 
         Label label = getNode(labels, "regularLabel");
         Assertions.assertThat(label).hasText("Watch here");
@@ -78,10 +81,11 @@ class BitsBytesMainTest {
     void whenBlockingButtonIsClicked_thenLabelTextChanges(FxRobot robot) {
         // given:
         final Set<Button> buttons = robot.lookup(".button").queryAllAs(Button.class);
-        Button blockingButton = buttons.stream().filter(b -> "Blocking".equals(b.getText())).findFirst().get();
+        Optional<Button> blockingButton = buttons.stream().filter(b -> "Blocking".equals(b.getText())).findFirst();
+        Assertions.assertThat(blockingButton).isPresent();
 
         // when:
-        robot.clickOn(blockingButton);
+        robot.clickOn(blockingButton.get());
 
         // then:
         final Set<Label> labels = robot.lookup(".label").queryAllAs(Label.class);
