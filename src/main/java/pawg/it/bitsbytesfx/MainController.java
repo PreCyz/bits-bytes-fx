@@ -1,21 +1,28 @@
 package pawg.it.bitsbytesfx;
 
+import java.net.URL;
 import java.util.Random;
+import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javafx.animation.*;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Control;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.concurrent.CompletableFuture;
 
 public class MainController implements Initializable {
     @FXML
@@ -29,17 +36,21 @@ public class MainController implements Initializable {
     @FXML
     private ProgressIndicator progressIndicator;
 
+    private ExecutorService executor;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         animation(regularLabel, Animation.INDEFINITE);
         textField.textProperty().bindBidirectional(regularLabel.textProperty());
+
+        executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         nonBlockingButton.setOnAction(event -> {
             Task<Void> waitTask = getNewTask();
             progressIndicator.setVisible(true);
             progressIndicator.progressProperty().unbind();
             progressIndicator.progressProperty().bind(waitTask.progressProperty());
             CompletableFuture
-                    .runAsync(() -> Platform.runLater(() -> regularLabel.setText("Non-Blocking button pressed")))
+                    .runAsync(() -> Platform.runLater(() -> regularLabel.setText("Non-Blocking button pressed")), executor)
                     .thenRun(waitTask)
                     .thenRun(() -> Platform.runLater(() -> {
                         textField.setText("Async task done.");
