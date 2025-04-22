@@ -5,7 +5,10 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -57,7 +60,7 @@ public class PathTransitionExample extends Application {
         pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
 
         //Setting the cycle count for the transition
-        pathTransition.setCycleCount(50);
+        pathTransition.setCycleCount(5000);
 
         //Setting auto reverse value to false
         pathTransition.setAutoReverse(false);

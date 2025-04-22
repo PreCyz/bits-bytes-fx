@@ -41,7 +41,7 @@ public class TranslateTransitionExample extends Application {
         translateTransition.setByX(300);
 
         //Setting the cycle count for the transition
-        translateTransition.setCycleCount(50);
+        translateTransition.setCycleCount(5000);
 
         //Setting auto reverse value to false
         translateTransition.setAutoReverse(false);

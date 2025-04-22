@@ -41,7 +41,7 @@ public class FillTransitionExample extends Application {
         fillTransition.setToValue(Color.CORAL);
 
         //Setting the cycle count for the transition
-        fillTransition.setCycleCount(50);
+        fillTransition.setCycleCount(5000);
 
         //Setting auto reverse value to false
         fillTransition.setAutoReverse(false);

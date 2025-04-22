@@ -42,7 +42,7 @@ public class ScaleTransitionExample extends Application {
         scaleTransition.setByX(1.5);
 
         //Setting the cycle count for the translation
-        scaleTransition.setCycleCount(50);
+        scaleTransition.setCycleCount(5000);
 
         //Setting auto reverse value to true
         scaleTransition.setAutoReverse(false);

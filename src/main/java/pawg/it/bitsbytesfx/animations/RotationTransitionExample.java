@@ -40,7 +40,7 @@ public class RotationTransitionExample extends Application {
         rotateTransition.setByAngle(360);
 
         //Setting the cycle count for the transition
-        rotateTransition.setCycleCount(50);
+        rotateTransition.setCycleCount(5000);
 
         //Setting auto reverse value to false
         rotateTransition.setAutoReverse(false);

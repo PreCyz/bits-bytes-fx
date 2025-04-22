@@ -1,6 +1,9 @@
 package pawg.it.bitsbytesfx.animations;
 
-import javafx.animation.*;
+import javafx.animation.PauseTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -47,7 +50,7 @@ public class PauseTransitionExample extends Application {
         translateTransition.setByX(300);
 
         //Setting the cycle count for the stroke
-        translateTransition.setCycleCount(5);
+        translateTransition.setCycleCount(5000);
 
         //Setting auto reverse value to true
         translateTransition.setAutoReverse(false);

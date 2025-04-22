@@ -41,7 +41,7 @@ public class FadeTransitionExample extends Application {
         fadeTransition.setToValue(0.3);
 
         //Setting the cycle count for the transition
-        fadeTransition.setCycleCount(50);
+        fadeTransition.setCycleCount(5000);
 
         //Setting auto reverse value to false
         fadeTransition.setAutoReverse(false);

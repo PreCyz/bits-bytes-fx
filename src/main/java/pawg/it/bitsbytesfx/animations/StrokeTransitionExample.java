@@ -44,7 +44,7 @@ public class StrokeTransitionExample extends Application {
         strokeTransition.setToValue(Color.BROWN);
 
         //Setting the cycle count for the transition
-        strokeTransition.setCycleCount(50);
+        strokeTransition.setCycleCount(5000);
 
         //Setting auto reverse value to false
         strokeTransition.setAutoReverse(false);
