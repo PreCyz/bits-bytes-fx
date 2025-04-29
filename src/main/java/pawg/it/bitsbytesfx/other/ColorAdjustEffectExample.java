@@ -1,5 +1,6 @@
 package pawg.it.bitsbytesfx.other;
 
+import java.util.Objects;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -11,57 +12,30 @@ import javafx.stage.Stage;
 public class ColorAdjustEffectExample extends Application {
     @Override
     public void start(Stage stage) {
-        //Creating an image
-        Image image = new Image(getClass().getResourceAsStream("/img/pizza.png"));
-
-        //Setting the image view
-        ImageView imageView = new ImageView(image);
-
-        //Setting the position of the image
-        imageView.setX(100);
-        imageView.setY(70);
-
-        //setting the fit height and width of the image view
-        imageView.setFitHeight(200);
-        imageView.setFitWidth(400);
-
-        //Setting the preserve ratio of the image view
-        imageView.setPreserveRatio(true);
-
-        //Instantiating the ColorAdjust class
         ColorAdjust colorAdjust = new ColorAdjust();
-
-        //Setting the contrast value
         colorAdjust.setContrast(0.4);
-
-        //Setting the hue value
         colorAdjust.setHue(-0.05);
-
-        //Setting the brightness value
         colorAdjust.setBrightness(0.9);
-
-        //Setting the saturation value
         colorAdjust.setSaturation(0.8);
 
-        //Applying coloradjust effect to the ImageView node
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/pizza.png")));
+        ImageView imageView = new ImageView(image);
+        imageView.setX(100);
+        imageView.setY(70);
+        imageView.setFitHeight(200);
+        imageView.setFitWidth(400);
+        imageView.setPreserveRatio(true);
         imageView.setEffect(colorAdjust);
 
-        //Creating a Group object
         Group root = new Group(imageView);
 
-        //Creating a scene object
         Scene scene = new Scene(root, 600, 300);
 
-        //Setting title to the Stage
         stage.setTitle("Color adjust effect example");
-
-        //Adding scene to the stage
         stage.setScene(scene);
-
-        //Displaying the contents of the stage
         stage.show();
     }
-    public static void main(String args[]){
+    public static void main(String[] args){
         launch(args);
     }
 }
