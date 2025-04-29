@@ -31,29 +31,38 @@ public class SequentialTransitionExample extends Application {
         );
 
         PathTransition pathTransition = new PathTransition();
-        pathTransition.setDuration(Duration.millis(1000));
+        pathTransition.setDuration(Duration.millis(2000));
         pathTransition.setNode(circle);
         pathTransition.setPath(path);
         pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-        pathTransition.setCycleCount(2);
+        pathTransition.setCycleCount(1);
         pathTransition.setAutoReverse(false);
 
         TranslateTransition translateTransition = new TranslateTransition();
-        translateTransition.setDuration(Duration.millis(1000));
+        translateTransition.setDuration(Duration.millis(2000));
         translateTransition.setNode(circle);
-        translateTransition.setByX(-300);
-        translateTransition.setCycleCount(2);
+        translateTransition.setByX(-400);
+        translateTransition.setCycleCount(1);
         translateTransition.setAutoReverse(false);
 
         ScaleTransition scaleTransition = new ScaleTransition();
-        scaleTransition.setDuration(Duration.millis(1000));
+        scaleTransition.setDuration(Duration.millis(2000));
         scaleTransition.setNode(circle);
-        scaleTransition.setByY(1.5);
-        scaleTransition.setByX(1.5);
-        scaleTransition.setCycleCount(2);
+        scaleTransition.setByY(-0.4);
+        scaleTransition.setByX(-0.4);
+        scaleTransition.setCycleCount(1);
         scaleTransition.setAutoReverse(false);
 
-        SequentialTransition sequentialTransition = new SequentialTransition(circle, pathTransition, translateTransition, scaleTransition);
+        ScaleTransition scaleTransitionDown = new ScaleTransition();
+        scaleTransitionDown.setDuration(Duration.millis(2000));
+        scaleTransitionDown.setNode(circle);
+        scaleTransitionDown.setByY(0.4);
+        scaleTransitionDown.setByX(0.4);
+        scaleTransitionDown.setCycleCount(1);
+        scaleTransitionDown.setAutoReverse(false);
+
+        SequentialTransition sequentialTransition = new SequentialTransition(circle, pathTransition, translateTransition, scaleTransition, scaleTransitionDown);
+        sequentialTransition.setCycleCount(1000);
         sequentialTransition.play();
 
         Group root = new Group(circle);

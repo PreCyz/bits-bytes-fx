@@ -23,7 +23,7 @@ public class PauseTransitionExample extends Application {
         circle.setStrokeWidth(20);
 
         TranslateTransition translateTransition = new TranslateTransition();
-        translateTransition.setDuration(Duration.millis(1000));
+        translateTransition.setDuration(Duration.millis(2000));
         translateTransition.setNode(circle);
         translateTransition.setByX(200);
         translateTransition.setCycleCount(1);
@@ -33,14 +33,15 @@ public class PauseTransitionExample extends Application {
         pauseTransition.setDuration(Duration.millis(1000));
 
         ScaleTransition scaleTransition = new ScaleTransition();
-        scaleTransition.setDuration(Duration.millis(1000));
+        scaleTransition.setDuration(Duration.millis(2000));
         scaleTransition.setNode(circle);
-        scaleTransition.setByY(1.5);
-        scaleTransition.setByX(1.5);
+        scaleTransition.setByY(0.5);
+        scaleTransition.setByX(0.5);
         scaleTransition.setCycleCount(1);
         scaleTransition.setAutoReverse(false);
 
         SequentialTransition sequentialTransition = new SequentialTransition(circle, translateTransition, pauseTransition, scaleTransition);
+        sequentialTransition.setCycleCount(100);
         sequentialTransition.play();
 
         Group root = new Group(circle);

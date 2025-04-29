@@ -31,7 +31,7 @@ public class ParallelTransitionExample extends Application {
         );
 
         PathTransition pathTransition = new PathTransition();
-        pathTransition.setDuration(Duration.millis(1000));
+        pathTransition.setDuration(Duration.millis(2000));
         pathTransition.setNode(rectangle);
         pathTransition.setPath(path);
         pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
@@ -39,21 +39,22 @@ public class ParallelTransitionExample extends Application {
         pathTransition.setAutoReverse(false);
 
         TranslateTransition translateTransition = new TranslateTransition();
-        translateTransition.setDuration(Duration.millis(1000));
+        translateTransition.setDuration(Duration.millis(2000));
         translateTransition.setNode(rectangle);
         translateTransition.setByX(300);
         translateTransition.setCycleCount(1);
         translateTransition.setAutoReverse(false);
 
         ScaleTransition scaleTransition = new ScaleTransition();
-        translateTransition.setDuration(Duration.millis(1000));
+        translateTransition.setDuration(Duration.millis(2000));
         translateTransition.setNode(rectangle);
-        scaleTransition.setByY(0.5);
+        scaleTransition.setByY(0.7);
         scaleTransition.setByX(0.5);
         scaleTransition.setCycleCount(1);
         scaleTransition.setAutoReverse(false);
 
         ParallelTransition parallelTransition = new ParallelTransition(rectangle, pathTransition, translateTransition, scaleTransition);
+        parallelTransition.setCycleCount(100);
         parallelTransition.play();
 
         Group root = new Group(rectangle);
