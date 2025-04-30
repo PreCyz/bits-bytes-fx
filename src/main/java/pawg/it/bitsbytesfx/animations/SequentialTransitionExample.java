@@ -1,17 +1,11 @@
 package pawg.it.bitsbytesfx.animations;
 
-import javafx.animation.PathTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.SequentialTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
+import javafx.scene.shape.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -61,7 +55,10 @@ public class SequentialTransitionExample extends Application {
         scaleTransitionDown.setCycleCount(1);
         scaleTransitionDown.setAutoReverse(false);
 
-        SequentialTransition sequentialTransition = new SequentialTransition(circle, pathTransition, translateTransition, scaleTransition, scaleTransitionDown);
+        SequentialTransition sequentialTransition = new SequentialTransition(
+                circle,
+                pathTransition, translateTransition, scaleTransition, scaleTransitionDown
+        );
         sequentialTransition.setCycleCount(1000);
         sequentialTransition.play();
 
