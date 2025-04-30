@@ -1,20 +1,17 @@
 package pawg.it.bitsbytesfx.other;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Orientation;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Scene;
+import javafx.scene.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+
+import java.util.*;
 
 public class ColorAdjustEffectExample extends Application {
 
@@ -30,7 +27,21 @@ public class ColorAdjustEffectExample extends Application {
         colorAdjust.setBrightness(0.09);
         colorAdjust.setSaturation(-0.8);
 
+        Collection<Node> nodes = new ArrayList<>(createImageViews(colorAdjust));
+        nodes.addAll(createSlidersAndLabels(colorAdjust));
+
+        Group root = new Group(nodes.toArray(Node[]::new));
+
+        Scene scene = new Scene(root, 600, 300);
+
+        stage.setTitle("Color adjust effect example");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private Collection<ImageView> createImageViews(ColorAdjust colorAdjust) {
         Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/pizza.png")));
+
         ImageView imageView = new ImageView(image);
         imageView.setX(100);
         imageView.setY(70);
@@ -46,35 +57,29 @@ public class ColorAdjustEffectExample extends Application {
         originalImageView.setFitWidth(200);
         originalImageView.setPreserveRatio(true);
 
-        Collection<Node> nodes = createSlidersAndLabels(colorAdjust);
-
-        Group root = new Group(imageView, originalImageView);
-        root.getChildren().addAll(nodes);
-
-        Scene scene = new Scene(root, 600, 300);
-
-        stage.setTitle("Color adjust effect example");
-        stage.setScene(scene);
-        stage.show();
+        return List.of(imageView, originalImageView);
     }
 
     private Collection<Node> createSlidersAndLabels(final ColorAdjust colorAdjust) {
         final Slider contrastSlider = createSlider(colorAdjust.getContrast());
         contrastSlider.setLayoutX(400);
-        contrastSlider.valueProperty().addListener(
+        colorAdjust.contrastProperty().bind(contrastSlider.valueProperty());
+//        contrastSlider.valueProperty().bind(colorAdjust.contrastProperty());
+//        contrastSlider.valueProperty().bindBidirectional(colorAdjust.contrastProperty());
+        /*contrastSlider.valueProperty().addListener(
                 (observable, oldValue, newValue) -> colorAdjust.setContrast(newValue.doubleValue())
-        );
+        );*/
 
         final Slider hueSlider = createSlider(colorAdjust.getHue());
-        hueSlider.valueProperty().bindBidirectional(colorAdjust.hueProperty());
+        colorAdjust.hueProperty().bind(hueSlider.valueProperty());
         hueSlider.setLayoutX(450);
 
         final Slider brightnessSlider = createSlider(colorAdjust.getBrightness());
-        brightnessSlider.valueProperty().bindBidirectional(colorAdjust.brightnessProperty());
+        colorAdjust.brightnessProperty().bind(brightnessSlider.valueProperty());
         brightnessSlider.setLayoutX(500);
 
         final Slider saturationSlider = createSlider(colorAdjust.getSaturation());
-        saturationSlider.valueProperty().bindBidirectional(colorAdjust.saturationProperty());
+        colorAdjust.saturationProperty().bind(saturationSlider.valueProperty());
         saturationSlider.setLayoutX(550);
 
         return List.of(
