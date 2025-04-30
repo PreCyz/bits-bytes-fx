@@ -17,6 +17,11 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 public class ColorAdjustEffectExample extends Application {
+
+    public static void main(String[] args){
+        launch(args);
+    }
+
     @Override
     public void start(Stage stage) {
         ColorAdjust colorAdjust = new ColorAdjust();
@@ -99,9 +104,5 @@ public class ColorAdjustEffectExample extends Application {
         label.setLayoutX(slider.getLayoutX() - 5);
         label.setLayoutY(155);
         return label;
-    }
-
-    public static void main(String[] args){
-        launch(args);
     }
 }
