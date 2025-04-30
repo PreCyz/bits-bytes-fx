@@ -39,16 +39,16 @@ public class ColorAdjustEffectExample extends Application {
         imageView.setPreserveRatio(true);
         imageView.setEffect(colorAdjust);
 
-        ImageView imageView2 = new ImageView(image);
-        imageView2.setX(50);
-        imageView2.setY(1);
-        imageView2.setFitHeight(100);
-        imageView2.setFitWidth(200);
-        imageView2.setPreserveRatio(true);
+        ImageView originalImageView = new ImageView(image);
+        originalImageView.setX(50);
+        originalImageView.setY(1);
+        originalImageView.setFitHeight(100);
+        originalImageView.setFitWidth(200);
+        originalImageView.setPreserveRatio(true);
 
         Collection<Node> sliders = createSliders(colorAdjust);
 
-        Group root = new Group(imageView, imageView2);
+        Group root = new Group(imageView, originalImageView);
         root.getChildren().addAll(sliders);
 
         Scene scene = new Scene(root, 600, 300);
