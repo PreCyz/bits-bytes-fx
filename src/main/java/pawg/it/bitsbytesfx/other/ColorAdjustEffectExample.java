@@ -46,10 +46,10 @@ public class ColorAdjustEffectExample extends Application {
         originalImageView.setFitWidth(200);
         originalImageView.setPreserveRatio(true);
 
-        Collection<Node> sliders = createSliders(colorAdjust);
+        Collection<Node> nodes = createSlidersAndLabels(colorAdjust);
 
         Group root = new Group(imageView, originalImageView);
-        root.getChildren().addAll(sliders);
+        root.getChildren().addAll(nodes);
 
         Scene scene = new Scene(root, 600, 300);
 
@@ -58,7 +58,7 @@ public class ColorAdjustEffectExample extends Application {
         stage.show();
     }
 
-    private Collection<Node> createSliders(final ColorAdjust colorAdjust) {
+    private Collection<Node> createSlidersAndLabels(final ColorAdjust colorAdjust) {
         final Slider contrastSlider = createSlider(colorAdjust.getContrast());
         contrastSlider.setLayoutX(400);
         contrastSlider.valueProperty().addListener(
