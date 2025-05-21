@@ -1,6 +1,6 @@
 package pawg.it.bitsbytesfx;
 
-import javafx.animation.*;
+import javafx.animation.Animation;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -11,14 +11,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 import org.controlsfx.control.TaskProgressView;
 
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MainController implements Initializable {
     @FXML
@@ -45,8 +42,16 @@ public class MainController implements Initializable {
 
         initializeService();
 
-        animation(regularLabel, Animation.INDEFINITE);
+        Utils.animation(regularLabel, Animation.INDEFINITE);
         textField.textProperty().bindBidirectional(regularLabel.textProperty());
+
+        taskProgressView.setGraphicFactory(t -> {
+            Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(Utils.getIconPath())));
+            ImageView imageView = new ImageView(image);
+            imageView.setFitHeight(25);
+            imageView.setFitWidth(25);
+            return imageView;
+        });
 
         nonBlockingButton.setOnAction(event -> {
             processTask();
@@ -59,19 +64,19 @@ public class MainController implements Initializable {
         service = new Service<>() {
             @Override
             protected Task<Void> createTask() {
-                return getNewTask();
+                return Utils.getNewTask();
             }
         };
         service.setExecutor(executor);
         service.setOnScheduled(event -> regularLabel.setText("Non-Blocking button pressed (service)"));
         service.setOnSucceeded(event -> {
             textField.setText("Async service done.");
-            animation(serviceProgressBar, 3);
+            Utils.animation(serviceProgressBar, 3);
         });
     }
 
     private void processTask() {
-        Task<Void> waitTask = getNewTask();
+        Task<Void> waitTask = Utils.getNewTask();
         progressIndicator.setVisible(true);
         progressIndicator.progressProperty().unbind();
         progressIndicator.progressProperty().bind(waitTask.progressProperty());
@@ -80,7 +85,7 @@ public class MainController implements Initializable {
                 .thenRun(waitTask)
                 .thenRun(() -> Platform.runLater(() -> {
                     textField.setText("Async task done.");
-                    animation(progressIndicator, 3);
+                    Utils.animation(progressIndicator, 3);
                 }));
     }
 
@@ -94,69 +99,23 @@ public class MainController implements Initializable {
 
     @SuppressWarnings("unchecked")
     private void processTaskProgressView() {
-        List<Task<Void>> tasks = List.of(getNewTask(), getNewTask(), getNewTask());
         taskProgressView.setVisible(true);
-        taskProgressView.setGraphicFactory(t -> {
-            Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(getIconPath())));
-            ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(25);
-            imageView.setFitWidth(25);
-            return imageView;
-        });
+
+        List<Task<Void>> tasks = Utils.getTasks(3);
         taskProgressView.getTasks().addAll(tasks);
 
         CompletableFuture<Void>[] cfs = tasks.stream()
                 .map(t -> CompletableFuture.runAsync(t, executor))
                 .toArray(CompletableFuture[]::new);
         CompletableFuture<Void> allTaskCf = CompletableFuture.allOf(cfs)
-                .whenCompleteAsync((result, throwable) -> animation(taskProgressView, 3));
+                .whenCompleteAsync((result, throwable) -> Utils.animation(taskProgressView, 3));
 
         executor.submit(allTaskCf::join);
     }
 
-    Task<Void> getNewTask() {
-        return new Task<>() {
-            @Override
-            protected Void call() {
-                try {
-                    int i = 0;
-                    do {
-                        Thread.sleep(50);
-                        i++;
-                        updateMessage("Progress: %d seconds".formatted(i));
-                        updateProgress(i, 100d);
-                        /// show Manipulating an active scene graph from the call method throws runtime exceptions.
-//                        regularLabel.setText("error " + i);
-                    } while (i < 100);
-                    updateMessage("All good!!!");
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                return null;
-            }
-        };
-    }
-
-    private void animation(Control control, int cycleCount) {
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(0.1), evt -> control.setOpacity(0.8)),
-                new KeyFrame(Duration.seconds(0.2), evt -> control.setOpacity(0.6)),
-                new KeyFrame(Duration.seconds(0.3), evt -> control.setOpacity(0.4)),
-                new KeyFrame(Duration.seconds(0.4), evt -> control.setOpacity(0.2)),
-                new KeyFrame(Duration.seconds(0.5), evt -> control.setOpacity(0.1)),
-                new KeyFrame(Duration.seconds(0.6), evt -> control.setOpacity(0.2)),
-                new KeyFrame(Duration.seconds(0.7), evt -> control.setOpacity(0.4)),
-                new KeyFrame(Duration.seconds(0.8), evt -> control.setOpacity(0.6)),
-                new KeyFrame(Duration.seconds(0.9), evt -> control.setOpacity(0.8)),
-                new KeyFrame(Duration.seconds(1), evt -> control.setOpacity(1)));
-        timeline.setCycleCount(cycleCount);
-        timeline.play();
-        timeline.setOnFinished(evt -> Platform.runLater(() -> control.setVisible(false)));
-    }
-
     @FXML
     protected void onBlockingButtonClick() {
-        Task<Void> waitTask = getNewTask();
+        Task<Void> waitTask = Utils.getNewTask();
         progressIndicator.setVisible(true);
         progressIndicator.progressProperty().unbind();
         progressIndicator.progressProperty().bind(waitTask.progressProperty());
@@ -166,32 +125,12 @@ public class MainController implements Initializable {
 
     @FXML
     protected void onVboxClicked() {
-        regularLabel.setText("VBox was clicked " + getClickCount());
+        regularLabel.setText("VBox was clicked " + Utils.getClickCount(regularLabel.getText()));
         Random random = new Random();
         regularLabel.setTextFill(Color.color(
                 random.nextDouble(0.0, 1.0),
                 random.nextDouble(0.0, 1.0),
                 random.nextDouble(0.0, 1.0)
         ));
-    }
-
-    private int getClickCount() {
-        int clickCount = 0;
-        Pattern digit = Pattern.compile("\\d+");
-
-        Matcher matcher = digit.matcher(regularLabel.getText());
-        if (matcher.find()) {
-            clickCount = Integer.parseInt(matcher.group());
-        }
-        return clickCount + 1;
-    }
-
-    private String getIconPath() {
-        return switch (new Random().nextInt(4)) {
-            case 0 -> "/img/minion_red.png";
-            case 1 -> "/img/minion_dancing.png";
-            case 2 -> "/img/minion_girl.png";
-            default ->  "/img/pizza.png";
-        };
     }
 }
