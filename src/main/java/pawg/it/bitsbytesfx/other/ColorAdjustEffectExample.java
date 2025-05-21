@@ -15,7 +15,7 @@ import java.util.*;
 
 public class ColorAdjustEffectExample extends Application {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         launch(args);
     }
 
@@ -103,9 +103,7 @@ public class ColorAdjustEffectExample extends Application {
 
     private Label createLabel(Slider slider, String text) {
         Label label = new Label();
-        label.setText(String.format("%f", slider.getValue()));
         label.textProperty().bind(Bindings.format("%s: %.2f", text, slider.valueProperty()));
-        label.setLabelFor(slider);
         label.setLayoutX(slider.getLayoutX() - 5);
         label.setLayoutY(155);
         return label;

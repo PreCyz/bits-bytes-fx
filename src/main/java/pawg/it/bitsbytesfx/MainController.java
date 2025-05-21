@@ -3,7 +3,6 @@ package pawg.it.bitsbytesfx;
 import java.net.URL;
 import java.util.Random;
 import java.util.ResourceBundle;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
@@ -12,6 +11,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,17 +37,25 @@ public class MainController implements Initializable {
     private ProgressIndicator progressIndicator;
 
     private ExecutorService executor;
+    private Service<Void> service;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+        initializeService();
+
         animation(regularLabel, Animation.INDEFINITE);
         textField.textProperty().bindBidirectional(regularLabel.textProperty());
 
-        executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         nonBlockingButton.setOnAction(event -> {
-            Task<Void> waitTask = getNewTask();
             progressIndicator.setVisible(true);
             progressIndicator.progressProperty().unbind();
+
+            progressIndicator.progressProperty().bind(service.progressProperty());
+            service.start();
+
+            /*Task<Void> waitTask = getNewTask();
             progressIndicator.progressProperty().bind(waitTask.progressProperty());
             CompletableFuture
                     .runAsync(() -> Platform.runLater(() -> regularLabel.setText("Non-Blocking button pressed")), executor)
@@ -55,7 +63,22 @@ public class MainController implements Initializable {
                     .thenRun(() -> Platform.runLater(() -> {
                         textField.setText("Async task done.");
                         animation(progressIndicator, 3);
-                    }));
+                    }));*/
+        });
+    }
+
+    private void initializeService() {
+        service = new Service<>() {
+            @Override
+            protected Task<Void> createTask() {
+                return getNewTask();
+            }
+        };
+        service.setExecutor(executor);
+        service.setOnScheduled(event -> regularLabel.setText("Non-Blocking button pressed"));
+        service.setOnSucceeded(event -> {
+            textField.setText("Async service done.");
+            animation(progressIndicator, 3);
         });
     }
 
@@ -87,6 +110,8 @@ public class MainController implements Initializable {
                         i++;
                         updateMessage("Progress: %d seconds".formatted(i));
                         updateProgress(i, 100d);
+                        /// show Manipulating an active scene graph from the call method throws runtime exceptions.
+//                        regularLabel.setText("error " + i);
                     } while (i < 100);
                     updateMessage("All good!!!");
                 } catch (InterruptedException e) {

@@ -2,7 +2,7 @@ module pawg.it.bitsbytesfx {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
-    requires org.controlsfx.controls;
+//    requires org.controlsfx.controls;
     requires atlantafx.base;
 
     exports pawg.it.bitsbytesfx;
