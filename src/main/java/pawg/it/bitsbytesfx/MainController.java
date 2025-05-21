@@ -187,7 +187,7 @@ public class MainController implements Initializable {
     }
 
     private String getIconPath() {
-        return switch (new Random().nextInt(5)) {
+        return switch (new Random().nextInt(4)) {
             case 0 -> "/img/minion_red.png";
             case 1 -> "/img/minion_dancing.png";
             case 2 -> "/img/minion_girl.png";
