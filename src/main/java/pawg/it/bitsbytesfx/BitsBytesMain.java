@@ -30,6 +30,7 @@ public class BitsBytesMain extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Bits & Bytes");
         stage.setScene(scene);
+        stage.setOnCloseRequest(event -> System.exit(0));
         stage.show();
     }
 
