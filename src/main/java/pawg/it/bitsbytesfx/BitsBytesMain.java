@@ -31,15 +31,13 @@ public class BitsBytesMain extends Application {
         Optional<Theme> themeOpt = getTheme();
         stage.getIcons().add(Utils.readImage("/img/pizza.png"));
         FXMLLoader fxmlLoader = new FXMLLoader(BitsBytesMain.class.getResource("main.fxml"));
-        Scene scene;
         if (themeOpt.isPresent()) {
             Application.setUserAgentStylesheet(themeOpt.get().getUserAgentStylesheet());
-            scene = new Scene(fxmlLoader.load(), 280, 535);
+            stage.setScene(new Scene(fxmlLoader.load(), 280, 535));
         } else {
-            scene = new Scene(fxmlLoader.load());
+            stage.setScene(new Scene(fxmlLoader.load()));
         }
         stage.setTitle("Bits & Bytes");
-        stage.setScene(scene);
         stage.setOnCloseRequest(event -> System.exit(0));
         stage.show();
     }
