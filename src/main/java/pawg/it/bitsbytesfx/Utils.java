@@ -1,17 +1,18 @@
 package pawg.it.bitsbytesfx;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Control;
+import javafx.scene.image.Image;
 import javafx.util.Duration;
-
-import java.util.List;
-import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 final class Utils {
     private Utils() {}
@@ -76,5 +77,9 @@ final class Utils {
 
     static List<Task<Void>> getTasks(int number) {
         return Stream.generate(Utils::getNewTask).limit(number).toList();
+    }
+
+    static Image readImage(String path) {
+        return new Image(Objects.requireNonNull(Utils.class.getResourceAsStream(path)));
     }
 }

@@ -1,15 +1,19 @@
 package pawg.it.bitsbytesfx;
 
-import atlantafx.base.theme.*;
+import atlantafx.base.theme.CupertinoDark;
+import atlantafx.base.theme.CupertinoLight;
+import atlantafx.base.theme.Dracula;
+import atlantafx.base.theme.NordDark;
+import atlantafx.base.theme.NordLight;
+import atlantafx.base.theme.PrimerDark;
+import atlantafx.base.theme.PrimerLight;
+import atlantafx.base.theme.Theme;
+import java.io.IOException;
+import java.util.Optional;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.util.Objects;
-import java.util.Optional;
 
 public class BitsBytesMain extends Application {
 
@@ -24,10 +28,16 @@ public class BitsBytesMain extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        getTheme().ifPresent(theme -> Application.setUserAgentStylesheet(theme.getUserAgentStylesheet()));
-        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/pizza.png"))));
+        Optional<Theme> themeOpt = getTheme();
+        stage.getIcons().add(Utils.readImage("/img/pizza.png"));
         FXMLLoader fxmlLoader = new FXMLLoader(BitsBytesMain.class.getResource("main.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        Scene scene;
+        if (themeOpt.isPresent()) {
+            Application.setUserAgentStylesheet(themeOpt.get().getUserAgentStylesheet());
+            scene = new Scene(fxmlLoader.load(), 280, 535);
+        } else {
+            scene = new Scene(fxmlLoader.load());
+        }
         stage.setTitle("Bits & Bytes");
         stage.setScene(scene);
         stage.setOnCloseRequest(event -> System.exit(0));
