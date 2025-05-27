@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Common JavaFX Mistakes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #666;
+        }
+        pre {
+            background-color: #eee;
+            padding: 10px;
+            border-left: 5px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Common JavaFX Mistakes</h1>
+
+<p>JavaFX is a powerful framework for building rich client applications, but developers, especially those new to it, often make several common mistakes. Here are some of the most frequent pitfalls:</p>
+
+<h2>1. Ignoring the JavaFX Threading Model</h2>
+<p><strong>Mistake:</strong> Performing UI updates or operations on the background thread instead of the JavaFX Application Thread.</p>
+<p><strong>Solution:</strong> Use <code>Platform.runLater()</code> to update the UI from the background thread.</p>
+<pre><code>Platform.runLater(() -> {
+    // Update UI components here
+});</code></pre>
+
+<h2>2. Not Using FXML Properly</h2>
+<p><strong>Mistake:</strong> Failing to separate UI design (FXML) from the application logic (Java code), leading to tightly coupled code.</p>
+<p><strong>Solution:</strong> Use a proper MVC (Model-View-Controller) architecture. Keep your controllers lightweight and use FXML for layout.</p>
+
+<h2>3. Memory Leaks</h2>
+<p><strong>Mistake:</strong> Creating listeners and not removing them, leading to memory leaks.</p>
+<p><strong>Solution:</strong> Always unregister listeners when they are no longer needed or when the component is disposed.</p>
+<pre><code>ChangeListener<Number&gt; listener = (observable, oldValue, newValue) -> {
+    // Handle change
+};
+someProperty.addListener(listener);
+// Later, when no longer needed
+someProperty.removeListener(listener);</code></pre>
+
+<h2>4. Overusing Layouts</h2>
+<p><strong>Mistake:</strong> Using too many nested layouts, which can lead to performance issues and complicated scene graphs.</p>
+<p><strong>Solution:</strong> Simplify the layout structure. Use appropriate layout managers and group related components.</p>
+
+<h2>5. Not Managing Scene Lifecycle</h2>
+<p><strong>Mistake:</strong> Failing to properly handle the lifecycle of scenes and stages, which can lead to unexpected behavior.</p>
+<p><strong>Solution:</strong> Be aware of the <code>init</code>, <code>start</code>, and <code>stop</code> methods in your application and manage resources accordingly.</p>
+
+<h2>6. Ignoring CSS Styling</h2>
+<p><strong>Mistake:</strong> Hardcoding styles in Java code instead of using CSS, leading to poor separation of concerns.</p>
+<p><strong>Solution:</strong> Utilize CSS for styling your JavaFX applications for better maintainability and flexibility.</p>
+<pre><code>.button {
+    -fx-background-color: #0066cc;
+    -fx-text-fill: white;
+}</code></pre>
+
+<h2>7. Handling Events Inefficiently</h2>
+<p><strong>Mistake:</strong> Creating multiple event handlers for similar events, leading to redundant code.</p>
+<p><strong>Solution:</strong> Use a single event handler for multiple components when possible, or create reusable methods.</p>
+
+<h2>8. Not Leveraging Binding</h2>
+<p><strong>Mistake:</strong> Manually updating properties instead of using property bindings, which can lead to more complex and error-prone code.</p>
+<p><strong>Solution:</strong> Use JavaFX's binding features to automatically synchronize properties.</p>
+<pre><code>someTextField.textProperty().bind(someModelProperty);</code></pre>
+
+<h2>9. Neglecting Accessibility</h2>
+<p><strong>Mistake:</strong> Overlooking accessibility features, making applications unusable for people with disabilities.</p>
+<p><strong>Solution:</strong> Implement accessibility features such as keyboard navigation and screen reader support.</p>
+
+<h2>10. Underestimating Performance Issues</h2>
+<p><strong>Mistake:</strong> Not profiling the application or underestimating the impact of complex graphics.</p>
+<p><strong>Solution:</strong> Use tools like Java VisualVM or Java Mission Control to monitor performance and optimize as needed.</p>
+
+<p>By being aware of these common mistakes and taking steps to avoid them, JavaFX developers can create more efficient, maintainable, and user-friendly applications. If you have specific scenarios or code examples you'd like to discuss further, feel free to ask!</p>
+
+</body>
+</html>

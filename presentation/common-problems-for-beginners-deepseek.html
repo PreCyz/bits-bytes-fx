@@ -1,0 +1,257 @@
+<html lang="en" class="notranslate" translate="no">
+	<body>
+		<h1>Najczęstsze problemy w JavaFX i rozwiązania</h1>
+		<div class="_62b4800"/>
+		<div class="_0efe408">
+			<div class="ds-icon d7829b2f _23ecf90" style="font-size: 24px; width: 24px; height: 24px; color: rgb(205, 212, 223);"/>
+		</div>
+		<div class="_3919b83">
+			<div class="_9663006">
+				<div class="fbb737a4">najczęstrze problemy przy programowaniu aplikacji w Java FX ktore najczesciej pojawiaja sie. opieraj sie o fora typu reddit, stackoverflow czy issues w repozytoriach</div>
+			</div>
+			<div class="ds-markdown ds-markdown--block" style="--ds-md-zoom: 1.143;">
+				<p class="ds-markdown-paragraph">Oto najczęstsze problemy, z jakimi spotykają się programiści podczas tworzenia aplikacji w JavaFX, wraz z rozwiązaniami opartymi na analizie forów, repozytoriów i doświadczeń społeczności:</p>
+				<hr/>
+				<h3>1. <strong>Błędy związane z wątkowością (FX Application Thread)</strong></h3>
+				<ul>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Problem:</strong> Długotrwałe operacje (np. obliczenia, zapytania sieciowe) uruchamiane na głównym wątku JavaFX (FXAT), co powoduje "zamrożenie" interfejsu.</p>
+					</li>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Przykład:</strong> Renderowanie fraktali bez użycia <code>Task</code> lub <code>Platform.runLater()</code>, jak w przypadku aplikacji Mandelbrot z forum Stack Overflow<span class="ds-markdown-cite">4</span>.</p>
+					</li>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Rozwiązanie:</strong>
+						</p>
+						<ul>
+							<li>
+								<p class="ds-markdown-paragraph">Używaj klas <code>Task</code>, <code>Service</code> lub <code>Platform.runLater()</code> do aktualizacji UI z wątków tła.</p>
+							</li>
+							<li>
+								<p class="ds-markdown-paragraph">Unikaj bezpośredniego dostępu do komponentów UI z innych wątków.</p>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<hr/>
+				<h3>2. <strong>Błędy ładowania FXML i konfiguracji kontrolerów</strong></h3>
+				<ul>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Problem:</strong>
+						</p>
+						<ul>
+							<li>
+								<p class="ds-markdown-paragraph">Nieprawidłowe ścieżki do plików FXML (np. brak zasobów w <code>getResource()</code>).</p>
+							</li>
+							<li>
+								<p class="ds-markdown-paragraph">Brak dopasowania <code>fx:id</code> w FXML do pól w kontrolerze lub pomylenie <code>fx:id</code> z <code>id</code> CSS.</p>
+							</li>
+							<li>
+								<p class="ds-markdown-paragraph">Importowanie niewłaściwych klas (np. <code>java.awt.event.KeyEvent</code> zamiast <code>javafx.scene.input.KeyEvent</code>)<span class="ds-markdown-cite">6</span>.</p>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Rozwiązanie:</strong>
+						</p>
+						<ul>
+							<li>
+								<p class="ds-markdown-paragraph">Sprawdź, czy pliki FXML są w katalogu <code>resources</code> i załadowane przez <code>FXMLLoader</code> z prawidłową ścieżką.</p>
+							</li>
+							<li>
+								<p class="ds-markdown-paragraph">Używaj adnotacji <code>@FXML</code> i upewnij się, że kontroler jest przypisany w FXML (<code>fx:controller</code>).</p>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<hr/>
+				<h3>3. <strong>Nieprawidłowe zarządzanie layoutem</strong></h3>
+				<ul>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Problem:</strong> Nadużywanie <code>AnchorPane</code> z ręcznym ustawianiem współrzędnych (X/Y) zamiast użycia layoutów takich jak <code>BorderPane</code>, <code>VBox</code> czy <code>GridPane</code>.</p>
+					</li>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Przykład:</strong> Początkujący często ignorują wbudowane klasy układu, co utrudnia responsywność<span class="ds-markdown-cite">4</span>.</p>
+					</li>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Rozwiązanie:</strong>
+						</p>
+						<ul>
+							<li>
+								<p class="ds-markdown-paragraph">Korzystaj z predefiniowanych kontenerów układu i stylów CSS.</p>
+							</li>
+							<li>
+								<p class="ds-markdown-paragraph">Używaj Scene Builder do wizualnego projektowania interfejsów<span class="ds-markdown-cite">9</span>
+									<span class="ds-markdown-cite">14</span>.</p>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<hr/>
+				<h3>4. <strong>Błędy zależności i konfiguracji środowiska</strong></h3>
+				<ul>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Problem:</strong>
+						</p>
+						<ul>
+							<li>
+								<p class="ds-markdown-paragraph">Brak integracji JavaFX z IDE (np. Eclipse bez wtyczki e(fx)clipse)<span class="ds-markdown-cite">6</span>
+									<span class="ds-markdown-cite">17</span>.</p>
+							</li>
+							<li>
+								<p class="ds-markdown-paragraph">Nieprawidłowe ustawienia ścieżek (np. <code>JAVAFX_HOME</code> w Eclipse)<span class="ds-markdown-cite">17</span>.</p>
+							</li>
+							<li>
+								<p class="ds-markdown-paragraph">Konflikty wersji JDK i JavaFX (np. użycie JavaFX 23 z JDK 17)<span class="ds-markdown-cite">14</span>.</p>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Rozwiązanie:</strong>
+						</p>
+						<ul>
+							<li>
+								<p class="ds-markdown-paragraph">W IntelliJ IDEA skonfiguruj Scene Builder w ustawieniach, w Eclipse zainstaluj e(fx)clipse<span class="ds-markdown-cite">9</span>
+									<span class="ds-markdown-cite">17</span>.</p>
+							</li>
+							<li>
+								<p class="ds-markdown-paragraph">Upewnij się, że wersje JDK i JavaFX są kompatybilne (np. JavaFX 23 wymaga JDK 21+)<span class="ds-markdown-cite">14</span>.</p>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<hr/>
+				<h3>5. <strong>Problemy ze stylowaniem CSS</strong></h3>
+				<ul>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Problem:</strong>
+						</p>
+						<ul>
+							<li>
+								<p class="ds-markdown-paragraph">Używanie standardowych właściwości CSS (np. <code>padding</code>) zamiast specyficznych dla JavaFX (np. <code>-fx-padding</code>).</p>
+							</li>
+							<li>
+								<p class="ds-markdown-paragraph">Brak ładowania arkuszy stylów lub błędne odwołania do <code>id</code> komponentów.</p>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Rozwiązanie:</strong>
+						</p>
+						<ul>
+							<li>
+								<p class="ds-markdown-paragraph">Stosuj prefiks <code>-fx-</code> dla właściwości CSS w JavaFX.</p>
+							</li>
+							<li>
+								<p class="ds-markdown-paragraph">Ładuj style przez <code>scene.getStylesheets().add(...)</code> i sprawdzaj poprawność ścieżek.</p>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<hr/>
+				<h3>6. <strong>Błędy wdrażania aplikacji (deployment)</strong></h3>
+				<ul>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Problem:</strong>
+						</p>
+						<ul>
+							<li>
+								<p class="ds-markdown-paragraph">Aplikacje nie uruchamiają się na innych komputerach z powodu braku środowiska JavaFX Runtime<span class="ds-markdown-cite">3</span>.</p>
+							</li>
+							<li>
+								<p class="ds-markdown-paragraph">Błędy pakowania (np. brak modułów w <code>module-info.java</code>).</p>
+							</li>
+							<li>
+								<p class="ds-markdown-paragraph">Problemy z podpisaniem aplikacji na macOS<span class="ds-markdown-cite">10</span>.</p>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Rozwiązanie:</strong>
+						</p>
+						<ul>
+							<li>
+								<p class="ds-markdown-paragraph">Używaj narzędzi takich jak <code>javafxpackager</code> lub <code>jlink</code> do tworzenia samodzielnych paczek.</p>
+							</li>
+							<li>
+								<p class="ds-markdown-paragraph">Sprawdź, czy JavaFX Runtime jest dołączony (np. przez Maven/Gradle)<span class="ds-markdown-cite">10</span>.</p>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<hr/>
+				<h3>7. <strong>Nieużywanie wzorca MVC i złej organizacji kodu</strong></h3>
+				<ul>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Problem:</strong> Mieszanie logiki biznesowej z kodem UI w jednej klasie, co prowadzi do naruszenia zasady SRP (Single Responsibility Principle)<span class="ds-markdown-cite">4</span>.</p>
+					</li>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Rozwiązanie:</strong>
+						</p>
+						<ul>
+							<li>
+								<p class="ds-markdown-paragraph">Separuj widok (FXML), kontroler i model.</p>
+							</li>
+							<li>
+								<p class="ds-markdown-paragraph">Wykorzystaj <code>FXMLLoader</code> i interfejs <code>Initializable</code> do czystej inicjalizacji<span class="ds-markdown-cite">12</span>.</p>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<hr/>
+				<h3>8. <strong>Błędy związane z wydajnością</strong></h3>
+				<ul>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Problem:</strong>
+						</p>
+						<ul>
+							<li>
+								<p class="ds-markdown-paragraph">Nadmierne użycie <code>Platform.runLater()</code> powodujące przeciążenie wątku FXAT.</p>
+							</li>
+							<li>
+								<p class="ds-markdown-paragraph">Brak optymalizacji operacji na dużych zbiorach danych (np. użycie <code>ParallelStream</code> do obliczeń)<span class="ds-markdown-cite">4</span>.</p>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<p class="ds-markdown-paragraph">
+							<strong>Rozwiązanie:</strong>
+						</p>
+						<ul>
+							<li>
+								<p class="ds-markdown-paragraph">Ograniczaj aktualizacje UI do niezbędnego minimum.</p>
+							</li>
+							<li>
+								<p class="ds-markdown-paragraph">Wykorzystuj wielowątkowość np. przez <code>CompletableFuture</code> lub <code>ParallelStream</code>.</p>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<hr/>
+				<h3>Podsumowanie</h3>
+				<p class="ds-markdown-paragraph">Większość problemów wynika z braku znajomości architektury JavaFX (np. wątkowości) lub nieprawidłowej konfiguracji środowiska. Kluczowe jest testowanie na wczesnym etapie, korzystanie z narzędzi takich jak Scene Builder<span class="ds-markdown-cite">9</span>
+					<span class="ds-markdown-cite">14</span> oraz śledzenie dokumentacji i forów (np. JFXCentral<span class="ds-markdown-cite">14</span>). W przypadku błędów warto analizować stack trace i używać debuggera<span class="ds-markdown-cite">13</span>.</p>
+				<p class="ds-markdown-paragraph">Źródła szczegółowych rozwiązań: <a href="https://docs.oracle.com/javafx/2/deployment/troubleshooting.htm" target="_blank" rel="noreferrer">Troubleshooting Oracle</a>
+					<span class="ds-markdown-cite">10</span>, <a href="https://www.pragmaticcoding.ca/javafx/beginner_mistakes" target="_blank" rel="noreferrer">PragmaticCoding</a>
+					<span class="ds-markdown-cite">4</span>, <a href="https://download.java.net/general/javafx/eclipse/tutorial.html" target="_blank" rel="noreferrer">JavaFX dla Eclipse</a>
+					<span class="ds-markdown-cite">17</span>.</p>
+			</div>
+		</body>
+	</html>

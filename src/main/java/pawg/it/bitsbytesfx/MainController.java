@@ -1,21 +1,29 @@
 package pawg.it.bitsbytesfx;
 
+import java.net.URL;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javafx.animation.Animation;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import org.controlsfx.control.TaskProgressView;
-
-import java.net.URL;
-import java.util.*;
-import java.util.concurrent.*;
 
 public class MainController implements Initializable {
     @FXML
@@ -110,6 +118,7 @@ public class MainController implements Initializable {
         CompletableFuture<Void> allTaskCf = CompletableFuture.allOf(cfs)
                 .whenCompleteAsync((result, throwable) -> Utils.animation(taskProgressView, 3));
 
+        ///  here is an awesome example to show how to block UI
         executor.submit(allTaskCf::join);
     }
 
