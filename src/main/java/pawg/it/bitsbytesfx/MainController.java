@@ -26,6 +26,9 @@ import javafx.scene.paint.Color;
 import org.controlsfx.control.TaskProgressView;
 
 public class MainController implements Initializable {
+
+    private static final int CYCLE_COUNT_BLINKING = 3;
+
     @FXML
     public VBox vbox;
     @FXML
@@ -48,8 +51,6 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-        initializeService();
-
         Utils.animation(regularLabel, Animation.INDEFINITE);
         textField.textProperty().bindBidirectional(regularLabel.textProperty());
 
@@ -61,6 +62,7 @@ public class MainController implements Initializable {
             return imageView;
         });
 
+        initializeService();
         nonBlockingButton.setOnAction(event -> {
             processTask();
             processService();
@@ -79,7 +81,7 @@ public class MainController implements Initializable {
         service.setOnScheduled(event -> regularLabel.setText("Non-Blocking button pressed (service)"));
         service.setOnSucceeded(event -> {
             textField.setText("Async service done.");
-            Utils.animation(serviceProgressBar, 3);
+            Utils.animation(serviceProgressBar, CYCLE_COUNT_BLINKING);
         });
     }
 
@@ -93,7 +95,7 @@ public class MainController implements Initializable {
                 .thenRun(waitTask)
                 .thenRun(() -> Platform.runLater(() -> {
                     textField.setText("Async task done.");
-                    Utils.animation(progressIndicator, 3);
+                    Utils.animation(progressIndicator, CYCLE_COUNT_BLINKING);
                 }));
     }
 
@@ -109,14 +111,15 @@ public class MainController implements Initializable {
     private void processTaskProgressView() {
         taskProgressView.setVisible(true);
 
-        List<Task<Void>> tasks = Utils.getTasks(3);
+        int numberOfTasks = 3;
+        List<Task<Void>> tasks = Utils.getTasks(numberOfTasks);
         taskProgressView.getTasks().addAll(tasks);
 
         CompletableFuture<Void>[] cfs = tasks.stream()
                 .map(t -> CompletableFuture.runAsync(t, executor))
                 .toArray(CompletableFuture[]::new);
         CompletableFuture<Void> allTaskCf = CompletableFuture.allOf(cfs)
-                .whenCompleteAsync((result, throwable) -> Utils.animation(taskProgressView, 3));
+                .whenCompleteAsync((result, throwable) -> Utils.animation(taskProgressView, CYCLE_COUNT_BLINKING));
 
         ///  here is an awesome example to show how to block UI
         executor.submit(allTaskCf::join);
