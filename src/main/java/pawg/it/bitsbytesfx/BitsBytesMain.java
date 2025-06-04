@@ -28,17 +28,22 @@ public class BitsBytesMain extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Optional<Theme> themeOpt = getTheme();
+        stage.setTitle("Bits & Bytes");
+
         stage.getIcons().add(Utils.readImage("/img/pizza.png"));
+
         FXMLLoader fxmlLoader = new FXMLLoader(BitsBytesMain.class.getResource("main.fxml"));
+
+        Optional<Theme> themeOpt = getTheme();
         if (themeOpt.isPresent()) {
             Application.setUserAgentStylesheet(themeOpt.get().getUserAgentStylesheet());
             stage.setScene(new Scene(fxmlLoader.load(), 280, 535));
         } else {
             stage.setScene(new Scene(fxmlLoader.load()));
         }
-        stage.setTitle("Bits & Bytes");
+
         stage.setOnCloseRequest(event -> System.exit(0));
+
         stage.show();
     }
 

@@ -27,7 +27,7 @@ import org.controlsfx.control.TaskProgressView;
 
 public class MainController implements Initializable {
 
-    private static final int CYCLE_COUNT_BLINKING = 3;
+    private static final int CYCLE_COUNT_BLINKING = 2;
 
     @FXML
     public VBox vbox;
@@ -52,7 +52,7 @@ public class MainController implements Initializable {
         executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
         Utils.animation(regularLabel, Animation.INDEFINITE);
-        textField.textProperty().bindBidirectional(regularLabel.textProperty());
+        regularLabel.textProperty().bindBidirectional(textField.textProperty());
 
         taskProgressView.setGraphicFactory(t -> {
             Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(Utils.getIconPath())));
@@ -70,21 +70,6 @@ public class MainController implements Initializable {
         });
     }
 
-    private void initializeService() {
-        service = new Service<>() {
-            @Override
-            protected Task<Void> createTask() {
-                return Utils.getNewTask();
-            }
-        };
-        service.setExecutor(executor);
-        service.setOnScheduled(event -> regularLabel.setText("Non-Blocking button pressed (service)"));
-        service.setOnSucceeded(event -> {
-            textField.setText("Async service done.");
-            Utils.animation(serviceProgressBar, CYCLE_COUNT_BLINKING);
-        });
-    }
-
     private void processTask() {
         Task<Void> waitTask = Utils.getNewTask();
         progressIndicator.setVisible(true);
@@ -97,6 +82,21 @@ public class MainController implements Initializable {
                     textField.setText("Async task done.");
                     Utils.animation(progressIndicator, CYCLE_COUNT_BLINKING);
                 }));
+    }
+
+    private void initializeService() {
+        service = new Service<>() {
+            @Override
+            protected Task<Void> createTask() {
+                return Utils.getNewTask();
+            }
+        };
+        service.setExecutor(executor);
+        service.setOnScheduled(event -> regularLabel.setText("Non-Blocking button pressed (service)"));
+        service.setOnSucceeded(event -> {
+            textField.setText("Async service done.");
+            Utils.animation(serviceProgressBar, CYCLE_COUNT_BLINKING + 1);
+        });
     }
 
     private void processService() {
@@ -119,9 +119,10 @@ public class MainController implements Initializable {
                 .map(t -> CompletableFuture.runAsync(t, executor))
                 .toArray(CompletableFuture[]::new);
         CompletableFuture<Void> allTaskCf = CompletableFuture.allOf(cfs)
-                .whenCompleteAsync((result, throwable) -> Utils.animation(taskProgressView, CYCLE_COUNT_BLINKING));
+                .whenCompleteAsync((result, throwable) -> Utils.animation(taskProgressView, CYCLE_COUNT_BLINKING + 2));
 
         ///  here is an awesome example to show how to block UI
+        //allTaskCf.join();
         executor.submit(allTaskCf::join);
     }
 
