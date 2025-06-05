@@ -52,6 +52,7 @@ public class MainController implements Initializable {
         executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
         Utils.animation(regularLabel, Animation.INDEFINITE);
+        /// property binding experiment
         regularLabel.textProperty().bindBidirectional(textField.textProperty());
 
         taskProgressView.setGraphicFactory(t -> {
@@ -122,7 +123,7 @@ public class MainController implements Initializable {
                 .whenCompleteAsync((result, throwable) -> Utils.animation(taskProgressView, CYCLE_COUNT_BLINKING + 2));
 
         ///  here is an awesome example to show how to block UI
-        //allTaskCf.join();
+//        allTaskCf.join();
         executor.submit(allTaskCf::join);
     }
 

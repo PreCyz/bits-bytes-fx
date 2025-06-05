@@ -1,17 +1,21 @@
 package pawg.it.bitsbytesfx.other;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Orientation;
-import javafx.scene.*;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-
-import java.util.*;
 
 public class ColorAdjustEffectExample extends Application {
 
@@ -63,8 +67,9 @@ public class ColorAdjustEffectExample extends Application {
     private Collection<Node> createSlidersAndLabels(final ColorAdjust colorAdjust) {
         final Slider contrastSlider = createSlider(colorAdjust.getContrast());
         contrastSlider.setLayoutX(400);
+        /// property binding experiment
         colorAdjust.contrastProperty().bind(contrastSlider.valueProperty());
-//        contrastSlider.valueProperty().bind(colorAdjust.contrastProperty());
+//        contrastSlider.valueProperty().bind(colorAdjust.contrastProperty()); // interesting !!!
 //        contrastSlider.valueProperty().bindBidirectional(colorAdjust.contrastProperty());
         /*contrastSlider.valueProperty().addListener(
                 (observable, oldValue, newValue) -> colorAdjust.setContrast(newValue.doubleValue())
